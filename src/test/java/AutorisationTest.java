@@ -9,27 +9,23 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class AutorisationTest  {
+public class AutorisationTest extends BaseTest {
 
    public WebDriver driver = new ChromeDriver();
-    public String validLog = "222";
-    public  String validPas = "222";
-    public  String invalidLog = "789";
-    public  String invalidpas = "789";
-    public String port = "8081";
-    public  String loginPage = "http://localhost:"+port+"/bh/login?returnUrl=%2F";
-    public  String urlAuthorizedUser = "http://localhost:"+port+"/bh/";
-
-
-
-
+    public final String VALIDLOG = "222";
+    public final String VALIDPAS = "222";
+    public final String INVALID_LOG = "789";
+    public final String INVALID_PAS = "789";
+    public final String PORT = "8081";
+    public final String LOGIN_PAGE = "http://localhost:"+ PORT +"/bh/login?returnUrl=%2F";
+    public final  String URL_AUTHORIZED_USER = "http://localhost:"+ PORT +"/bh/";
 
 
     @Test
     void checkValidCredentials() {
 
         authWithValidCredentials();
-        String expectedUrl = urlAuthorizedUser;
+        String expectedUrl = URL_AUTHORIZED_USER;
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -43,10 +39,9 @@ public class AutorisationTest  {
     public void authWithValidCredentials() {
         visitAuthPage();
         setTimeout();
-        String login = validLog;
-        String password = validPas;
+        String login = VALIDLOG;
+        String password = VALIDPAS;
         inputCredentials(driver, login, password, false);
-        //change1
     }
 
 
@@ -55,9 +50,9 @@ public class AutorisationTest  {
 
         setTimeout();
         visitAuthPage();
-        String expectedUrl = loginPage;
-        String login = invalidLog;
-        String password = invalidpas;
+        String expectedUrl = LOGIN_PAGE;
+        String login = INVALID_LOG;
+        String password = INVALID_PAS;
         inputCredentials(driver, login, password, false);
         try {
             Thread.sleep(2000);
@@ -68,13 +63,13 @@ public class AutorisationTest  {
         driver.quit();
     }
     @Test
-    void checkInvalidCredantialsCorrectLog(){
+    void checkInvalidCredantialsWithCorrectLoginIncorrectPassword(){
 
         setTimeout();
         visitAuthPage();
-        String expectedUrl = loginPage;
-        String login = validLog;
-        String password = invalidpas;
+        String expectedUrl = LOGIN_PAGE;
+        String login = VALIDLOG;
+        String password = INVALID_PAS;
         inputCredentials(driver, login, password, false);
         try {
             Thread.sleep(2000);
@@ -85,13 +80,13 @@ public class AutorisationTest  {
         driver.quit();
     }
     @Test
-    void checkInvalidCredantialsCorrectPass(){
+    void checkInvalidCredantialsWithCorrectPassIncorrectLogin(){
 
         setTimeout();
         visitAuthPage();
-        String expectedUrl = loginPage;
-        String login = invalidLog;
-        String password = validPas;
+        String expectedUrl = LOGIN_PAGE;
+        String login = INVALID_LOG;
+        String password = VALIDPAS;
         inputCredentials(driver, login, password, false);
         try {
             Thread.sleep(2000);
@@ -102,11 +97,11 @@ public class AutorisationTest  {
         driver.quit();
     }
     @Test
-    void checkInvalidCredantialsEmpty(){
+    void checkInvalidCredantialsEmptyLoginAndPassword(){
 
         setTimeout();
         visitAuthPage();
-        String expectedUrl = loginPage;
+        String expectedUrl = LOGIN_PAGE;
         String login = "";
         String password = "";
         inputCredentials(driver, login, password, false);
@@ -134,10 +129,10 @@ public class AutorisationTest  {
     void checkboxRememberUser(){
         setTimeout();
         visitAuthPage();
-        String login = validLog;
-        String password = validPas;
+        String login = VALIDLOG;
+        String password = VALIDPAS;
         boolean checkbox =true;
-        String expectedUrl = loginPage;
+        String expectedUrl = LOGIN_PAGE;
         WebElement loginEl = driver.findElement(By.id("username"));
         WebElement passwordEl = driver.findElement(By.id("password"));
         loginEl.sendKeys(login);
@@ -151,7 +146,7 @@ public class AutorisationTest  {
         driver.switchTo().window((String) windowHandles[0]);
         driver.close();
         driver.switchTo().window((String) windowHandles[1]);
-        driver.get("http://localhost:"+port+"/bh/");
+        driver.get("http://localhost:"+ PORT +"/bh/");
         WebElement exit = driver.findElement(By.xpath("//nav//i"));
         exit.click();
         assertEquals(expectedUrl,driver.getCurrentUrl());
@@ -166,7 +161,7 @@ public class AutorisationTest  {
     }
 
     public void visitAuthPage() {
-        driver.get("http://localhost:"+port+"/bh/");
+        driver.get("http://localhost:"+ PORT +"/bh/");
         driver.manage().window().maximize();
     }
 
@@ -175,10 +170,10 @@ public class AutorisationTest  {
         WebElement loginEl = driver.findElement(By.id("username"));
 
         WebElement passwordEl = driver.findElement(By.id("password"));
-if (checkboxRememberUser){
-    WebElement checkbox = driver.findElement(By.xpath("//input[@id='isRememberUser']"));
-    checkbox.click();
-}
+        if (checkboxRememberUser) {
+            WebElement checkbox = driver.findElement(By.xpath("//input[@id='isRememberUser']"));
+            checkbox.click();
+        }
 
         loginEl.sendKeys(login);
         passwordEl.sendKeys(password);
