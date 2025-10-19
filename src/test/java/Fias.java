@@ -1,7 +1,7 @@
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class Fias extends BaseTest{
+public class  Fias extends BaseTest{
     public void fillFias(WebDriver driver){
         WebElement region = findByExpath("//*[contains(text(), 'Регион')]/parent::tr//input", driver);
         region.click();
