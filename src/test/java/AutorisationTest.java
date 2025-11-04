@@ -1,17 +1,14 @@
-import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 import java.time.Duration;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class AutorisationTest extends BaseTest {
 
-   public WebDriver driver = new ChromeDriver();
     public final String VALIDLOG = "222";
     public final String VALIDPAS = "222";
     public final String INVALID_LOG = "789";
@@ -31,9 +28,9 @@ public class AutorisationTest extends BaseTest {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        //System.out.println(driver.getCurrentUrl());
-        assertEquals(expectedUrl,driver.getCurrentUrl());
-        driver.quit();
+        System.out.println(driver.getCurrentUrl());
+        Assert.assertEquals(driver.getCurrentUrl(), expectedUrl);
+
     }
 
     public void authWithValidCredentials() {
@@ -59,8 +56,8 @@ public class AutorisationTest extends BaseTest {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        assertEquals(expectedUrl,driver.getCurrentUrl());
-        driver.quit();
+     Assert.assertEquals(driver.getCurrentUrl(), expectedUrl);
+
     }
     @Test
     void checkInvalidCredantialsWithCorrectLoginIncorrectPassword(){
@@ -76,10 +73,10 @@ public class AutorisationTest extends BaseTest {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        assertEquals(expectedUrl,driver.getCurrentUrl());
-        driver.quit();
+        Assert.assertEquals(driver.getCurrentUrl(), expectedUrl);
+
     }
-    @Test
+ @Test
     void checkInvalidCredantialsWithCorrectPassIncorrectLogin(){
 
         setTimeout();
@@ -93,10 +90,10 @@ public class AutorisationTest extends BaseTest {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        assertEquals(expectedUrl,driver.getCurrentUrl());
-        driver.quit();
+     Assert.assertEquals(driver.getCurrentUrl(), expectedUrl);
+
     }
-    @Test
+   @Test
     void checkInvalidCredantialsEmptyLoginAndPassword(){
 
         setTimeout();
@@ -110,20 +107,20 @@ public class AutorisationTest extends BaseTest {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        assertEquals(expectedUrl,driver.getCurrentUrl());
+        Assert.assertEquals(driver.getCurrentUrl(), expectedUrl);
         String expectedLogText = "Введите имя пользователя";
         String expectedPassText = "Введите пароль";
         String expectedTexth2 = "БАРС-Балансодержатель";
         String expectedTexth4 = "Вход в систему";
         WebElement texth2 = driver.findElement(By.xpath("//div/h2"));
         WebElement texth4 = driver.findElement(By.xpath("//div/h4"));
-        assertEquals(expectedTexth2,texth2.getText());
-        assertEquals(expectedTexth4,texth4.getText());
+        Assert.assertEquals(texth2.getText(), expectedTexth2);
+        Assert.assertEquals(texth4.getText(), expectedTexth4);
         WebElement inputlog = driver.findElement(By.xpath("(//div[@class='invalid-feedback'])[1]/div"));
         WebElement inputpass = driver.findElement(By.xpath("(//div[@class='invalid-feedback'])[2]/div"));
-        assertEquals(expectedLogText,inputlog.getText());
-        assertEquals(expectedPassText,inputpass.getText());
-        driver.quit();
+        Assert.assertEquals(inputlog.getText(), expectedLogText);
+        Assert.assertEquals(inputpass.getText(), expectedPassText);
+
     }
     @Test
     void checkboxRememberUser(){
@@ -149,11 +146,8 @@ public class AutorisationTest extends BaseTest {
         driver.get("http://localhost:"+ PORT +"/bh/");
         WebElement exit = driver.findElement(By.xpath("//nav//i"));
         exit.click();
-        assertEquals(expectedUrl,driver.getCurrentUrl());
-
-        driver.quit();
-
-    }
+        Assert.assertEquals(driver.getCurrentUrl(), expectedUrl);
+         }
 
 
     private void setTimeout() {
@@ -162,7 +156,7 @@ public class AutorisationTest extends BaseTest {
 
     public void visitAuthPage() {
         driver.get("http://localhost:"+ PORT +"/bh/");
-        driver.manage().window().maximize();
+
     }
 
 
