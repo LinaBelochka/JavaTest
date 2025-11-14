@@ -4,7 +4,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import java.time.Duration;
+import halpers.TestValue;
+
 
 
 public class AutorisationTest extends BaseTest {
@@ -13,16 +14,15 @@ public class AutorisationTest extends BaseTest {
     public final String VALIDPAS = "222";
     public final String INVALID_LOG = "789";
     public final String INVALID_PAS = "789";
-    public final String PORT = "8081";
-    public final String LOGIN_PAGE = "http://localhost:"+ PORT +"/bh/login?returnUrl=%2F";
-    public final  String URL_AUTHORIZED_USER = "http://localhost:"+ PORT +"/bh/";
+    public final String LOGIN_PAGE = "http://localhost:"+ TestValue.PORT +"/bh/login?returnUrl=%2F";
+
 
 
     @Test
     void checkValidCredentials() {
 
         authWithValidCredentials();
-        String expectedUrl = URL_AUTHORIZED_USER;
+        String expectedUrl = TestValue.AUTH_PAGE;
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -35,7 +35,7 @@ public class AutorisationTest extends BaseTest {
 
     public void authWithValidCredentials() {
         visitAuthPage();
-        setTimeout();
+        BaseTest.setTimeout();
         String login = VALIDLOG;
         String password = VALIDPAS;
         inputCredentials(driver, login, password, false);
@@ -45,7 +45,7 @@ public class AutorisationTest extends BaseTest {
     @Test
     void checkInvalidCredentials() {
 
-        setTimeout();
+        BaseTest.setTimeout();
         visitAuthPage();
         String expectedUrl = LOGIN_PAGE;
         String login = INVALID_LOG;
@@ -62,7 +62,7 @@ public class AutorisationTest extends BaseTest {
     @Test
     void checkInvalidCredantialsWithCorrectLoginIncorrectPassword(){
 
-        setTimeout();
+        BaseTest.setTimeout();
         visitAuthPage();
         String expectedUrl = LOGIN_PAGE;
         String login = VALIDLOG;
@@ -79,7 +79,7 @@ public class AutorisationTest extends BaseTest {
  @Test
     void checkInvalidCredantialsWithCorrectPassIncorrectLogin(){
 
-        setTimeout();
+        BaseTest.setTimeout();
         visitAuthPage();
         String expectedUrl = LOGIN_PAGE;
         String login = INVALID_LOG;
@@ -96,7 +96,7 @@ public class AutorisationTest extends BaseTest {
    @Test
     void checkInvalidCredantialsEmptyLoginAndPassword(){
 
-        setTimeout();
+        BaseTest.setTimeout();
         visitAuthPage();
         String expectedUrl = LOGIN_PAGE;
         String login = "";
@@ -124,7 +124,7 @@ public class AutorisationTest extends BaseTest {
     }
     @Test
     void checkboxRememberUser(){
-        setTimeout();
+        BaseTest.setTimeout();
         visitAuthPage();
         String login = VALIDLOG;
         String password = VALIDPAS;
@@ -143,19 +143,15 @@ public class AutorisationTest extends BaseTest {
         driver.switchTo().window((String) windowHandles[0]);
         driver.close();
         driver.switchTo().window((String) windowHandles[1]);
-        driver.get("http://localhost:"+ PORT +"/bh/");
+        driver.get("http://localhost:"+ TestValue.PORT +"/bh/");
         WebElement exit = driver.findElement(By.xpath("//nav//i"));
         exit.click();
         Assert.assertEquals(driver.getCurrentUrl(), expectedUrl);
          }
 
 
-    private void setTimeout() {
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-    }
-
     public void visitAuthPage() {
-        driver.get("http://localhost:"+ PORT +"/bh/");
+        driver.get(TestValue.AUTH_PAGE);
 
     }
 
