@@ -158,8 +158,8 @@ public class AutorisationTest extends BaseTest {
 
     public void inputCredentials(WebDriver driver, String login, String password, boolean checkboxRememberUser) {
         WebElement loginEl = driver.findElement(By.id("username"));
-
         WebElement passwordEl = driver.findElement(By.id("password"));
+
         if (checkboxRememberUser) {
             WebElement checkbox = driver.findElement(By.xpath("//input[@id='isRememberUser']"));
             checkbox.click();

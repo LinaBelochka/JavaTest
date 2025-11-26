@@ -1,32 +1,21 @@
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.time.Duration;
 
 
 
 
 public class AddObjectsTest extends BaseTest{
 
-
-
     private static Actions act;
     static AutorisationTest autorisationTest;
     static OknoOsnovaniy oknoOsnovaniy;
     static Fias fias;
-
-
 
     @BeforeClass
     public void beforeAll() {
@@ -37,8 +26,7 @@ public class AddObjectsTest extends BaseTest{
         act = new Actions(BaseTest.driver);
         PageFactory.initElements(driver, this);
         act = new Actions(driver);
-
-            }
+                            }
 
 
     @FindBy (xpath="//a[@href='/bh/objects']")
@@ -72,7 +60,6 @@ public class AddObjectsTest extends BaseTest{
 
     @FindBy (xpath = "//input[@id='ROBJECT_ADD_OKTMO_REG']/parent::div/div/button[@title='Открыть справочник']")
     WebElement oktmolist;
-
     @FindBy (xpath = "//*[contains(text(), 'Удмуртская Республика (ОКТМО)')]")
     WebElement oktmo;
 
@@ -86,11 +73,7 @@ public class AddObjectsTest extends BaseTest{
     WebElement kadastrCoast;
 
     @Test(description = "добавление объекта земельный участок")
-
     public void addObject() {
-
-        // Явные ожидания
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         wait.until(ExpectedConditions.visibilityOf(object)).click();
         landPlotTab.click();
@@ -110,7 +93,8 @@ public class AddObjectsTest extends BaseTest{
         oktmolist.click();
         act.doubleClick(oktmo).perform();
         save.click();
-        oknoOsnovaniy.fillOsnovanie(driver);}
+        oknoOsnovaniy.fillOsnovanie(driver);
+    }
 
 
     @FindBy (xpath ="//*[contains(text(), ' Недвижимое имущество ')]" )
@@ -121,13 +105,9 @@ public class AddObjectsTest extends BaseTest{
 
     @Test(description = "добавление недвижимого имущества")
     public void addNedvizhimoe() {
-
-        BaseTest.setTimeout();
-
-        object.click();
+        wait.until(ExpectedConditions.visibilityOf(object)).click();
         realEstate.click();
         waitForSpinnerToDisappear();
-        Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         wait.until(ExpectedConditions.elementToBeClickable(add));
         add.click();
         adressList.click();
@@ -138,8 +118,22 @@ public class AddObjectsTest extends BaseTest{
 
 }
 
-    @Test
+    @FindBy(xpath = "//div[contains(text(), 'Движимое имущество')]//mat-icon")
+    WebElement isMovable;
+    @FindBy(xpath = "//mat-tree-node/li[contains(text(), 'Автотранспорт')]")
+    WebElement avto;
+
+
+    @Test(description = "добавление объекта движимое имущество Автотранспорт")
     public void add(){
+        wait.until(ExpectedConditions.visibilityOf(object)).click();
+        wait.until(ExpectedConditions.visibilityOf(isMovable)).click();
+        wait.until(ExpectedConditions.visibilityOf(avto)).click();
+        waitForSpinnerToDisappear();
+        wait.until(ExpectedConditions.visibilityOf(add)).click();
+        wait.until(ExpectedConditions.visibilityOf(addName)).sendKeys("Авто"+new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()));
+        save.click();
+        oknoOsnovaniy.fillOsnovanie(driver);
 
     }
 
