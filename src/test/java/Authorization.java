@@ -1,7 +1,6 @@
-import halpers.TestValue;
+import helpers.TestValue;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import halpers.TestValue;
 import org.testng.annotations.Test;
 
 public class Authorization extends BaseTest {

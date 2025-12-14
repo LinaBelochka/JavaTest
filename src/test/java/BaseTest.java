@@ -13,10 +13,10 @@ import java.time.Duration;
 
 public class BaseTest {
     protected static  WebDriver driver;
-    protected WebDriverWait wait;
+    protected static WebDriverWait wait;
 
     @BeforeTest
-    public  void setUp() {
+    public void setUp() {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
@@ -28,24 +28,34 @@ public class BaseTest {
     }
 
     @AfterClass
+    //закрытие браузера после теста
     public static void tearDown() {
         driver.close();
         driver.quit();
     }
-
+    //ожидание
     public static void setTimeout() {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
     }
-
-    public void waitForSpinnerToDisappear() {
+    //ожидание исчезновения спиннера
+    public static void waitForSpinnerToDisappear() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
                 By.xpath("//div[contains(@class, 'spinner-fon')]")
         ));
     }
-
+    //поиск по xpath
     public static WebElement findByXpath(String xpath, WebDriver driver){
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
         return driver.findElement(By.xpath(xpath));
     }
 
+    public static void sleep() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }

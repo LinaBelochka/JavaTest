@@ -5,24 +5,26 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.FindBy;
 
 public class OknoOsnovaniy extends BaseTest {
-
+    //поле указание причины
     @FindBy (xpath="//select[contains(@class, 'form-control')]")
     WebElement reason;
+    //поле указание основания
     @FindBy (xpath="(//div [contains(text(), 'Укажите основания изменений')]/parent::div//div)[14]//input")
     WebElement doc;
+    //кнопка сохранение
     @FindBy (xpath="(//*[contains(text(), 'Сохранить')])[2]")
     WebElement saveOsnovanie;
 
 
-    public void fillOsnovanie(WebDriver driver) {
-
+    public void Osnovanie(WebDriver driver) {
+        setTimeout();
         PageFactory.initElements(driver, this);
-
+        // указание причины
         Select reason1 = new Select(reason);
         reason1.selectByVisibleText("Изменения по объекту");
-
+        // указание основания
         doc.sendKeys("-");
-
+        //сохранение документа основания
         saveOsnovanie.click();
     }
 }
