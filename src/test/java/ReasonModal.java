@@ -4,7 +4,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.FindBy;
 
-public class OknoOsnovaniy extends BaseTest {
+public class ReasonModal extends BaseTest {
     //поле указание причины
     @FindBy (xpath="//select[contains(@class, 'form-control')]")
     WebElement reason;
@@ -13,10 +13,10 @@ public class OknoOsnovaniy extends BaseTest {
     WebElement doc;
     //кнопка сохранение
     @FindBy (xpath="(//*[contains(text(), 'Сохранить')])[2]")
-    WebElement saveOsnovanie;
+    WebElement saveReasonButton;
 
 
-    public void Osnovanie(WebDriver driver) {
+    public void reasonModal(WebDriver driver) {
         setTimeout();
         PageFactory.initElements(driver, this);
         // указание причины
@@ -25,6 +25,6 @@ public class OknoOsnovaniy extends BaseTest {
         // указание основания
         doc.sendKeys("-");
         //сохранение документа основания
-        saveOsnovanie.click();
+        saveReasonButton.click();
     }
 }

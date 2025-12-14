@@ -13,14 +13,14 @@ public class AddObjectsTest extends BaseTest{
 
     private static Actions act;
     static LoginTest loginTest;
-    static OknoOsnovaniy oknoOsnovaniy;
+    static ReasonModal reasonModal;
     static Fias fias;
 
     @BeforeClass
     public void beforeAll() {
         loginTest = new LoginTest();
         loginTest.authWithValidCredentials();
-        oknoOsnovaniy = new OknoOsnovaniy();
+        reasonModal = new ReasonModal();
         fias = new Fias();
         act = new Actions(BaseTest.driver);
         PageFactory.initElements(driver, this);
@@ -102,7 +102,7 @@ public class AddObjectsTest extends BaseTest{
         sleep();
         act.doubleClick(oktmo).perform();
         save.click();
-        oknoOsnovaniy.Osnovanie(driver);
+        reasonModal.reasonModal(driver);
     }
 
     @Test(description = "добавление недвижимого имущества")
@@ -115,7 +115,7 @@ public class AddObjectsTest extends BaseTest{
         fias.fias(driver);
         addName.sendKeys("Недвижимое имущество автотест"+new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()));
         save.click();
-        oknoOsnovaniy.Osnovanie(driver);
+        reasonModal.reasonModal(driver);
 
 }
     // раздел движимое имущество
@@ -135,7 +135,7 @@ public class AddObjectsTest extends BaseTest{
         add.click();
         addName.sendKeys("Авто"+new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()));
         save.click();
-        oknoOsnovaniy.Osnovanie(driver);
+        reasonModal.reasonModal(driver);
 
     }
 
