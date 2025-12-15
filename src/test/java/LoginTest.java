@@ -21,12 +21,14 @@ public class LoginTest extends BaseTest {
     @FindBy(xpath = "//span[contains(text(), 'Выход ')]")
     WebElement exit;
 
-    @Test //проверка авторизации с валидными данными
+    @Test //проверка авторизации с валидными данными и выход
     void checkValidCredentials() {
         authWithValidCredentials();
         sleep();
         Assert.assertEquals(driver.getCurrentUrl(), TestValue.AUTH_PAGE);
         exit.click();
+        sleep();
+        Assert.assertEquals(driver.getCurrentUrl(), "http://localhost:"+TestValue.PORT+"/bh/login");
     }
 
     @Test //проверка авторизации с невалидными логином и паролем

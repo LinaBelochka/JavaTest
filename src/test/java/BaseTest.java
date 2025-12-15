@@ -41,8 +41,7 @@ public class BaseTest {
     public static void waitForSpinnerToDisappear() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
         wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                By.xpath("//div[contains(@class, 'spinner-fon')]")
-        ));
+                By.xpath("//div[contains(@class, 'spinner-fon')]")));
     }
     //поиск по xpath
     public static WebElement findByXpath(String xpath, WebDriver driver){

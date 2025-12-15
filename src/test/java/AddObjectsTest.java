@@ -80,9 +80,16 @@ public class AddObjectsTest extends BaseTest{
     @FindBy(xpath = "//*[@id=\"ROBJECT_ADD_ADRESS\"]/parent::div//button[@title=\"Открыть справочник\"]")
     WebElement adressList;
 
-    @Test(description = "добавление объекта земельный участок")
-    public void addZU() {
+    // раздел движимое имущество
+    @FindBy(xpath = "//div[contains(text(), 'Движимое имущество')]//mat-icon")
+    WebElement isMovable;
+    // раздел автотранспорт
+    @FindBy(xpath = "//mat-tree-node/li[contains(text(), 'Автотранспорт')]")
+    WebElement avto;
 
+
+    @Test(description = "добавление объекта земельный участок/")
+    public void addZU() {
         object.click();
         landPlotTab.click();
         waitForSpinnerToDisappear();
@@ -104,7 +111,6 @@ public class AddObjectsTest extends BaseTest{
         save.click();
         reasonModal.reasonModal(driver);
     }
-
     @Test(description = "добавление недвижимого имущества")
     public void addNedvizhimoe() {
         object.click();
@@ -116,16 +122,7 @@ public class AddObjectsTest extends BaseTest{
         addName.sendKeys("Недвижимое имущество автотест"+new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()));
         save.click();
         reasonModal.reasonModal(driver);
-
 }
-    // раздел движимое имущество
-    @FindBy(xpath = "//div[contains(text(), 'Движимое имущество')]//mat-icon")
-    WebElement isMovable;
-    // раздел автотранспорт
-    @FindBy(xpath = "//mat-tree-node/li[contains(text(), 'Автотранспорт')]")
-    WebElement avto;
-
-
     @Test(description = "добавление объекта движимое имущество Автотранспорт")
     public void addDvizhimoe(){
         object.click();
@@ -136,9 +133,7 @@ public class AddObjectsTest extends BaseTest{
         addName.sendKeys("Авто"+new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()));
         save.click();
         reasonModal.reasonModal(driver);
-
     }
-
     }
 
 
