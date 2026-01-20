@@ -2,11 +2,12 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 import org.testng.annotations.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-
+import java.util.Locale;
+import java.util.Random;
 
 
 public class AddObjectsTest extends BaseTest{
@@ -15,6 +16,7 @@ public class AddObjectsTest extends BaseTest{
     static LoginTest loginTest;
     static ReasonModal reasonModal;
     static Fias fias;
+    static NavBar navBar;
 
     @BeforeClass
     public void beforeAll() {
@@ -25,17 +27,23 @@ public class AddObjectsTest extends BaseTest{
         act = new Actions(BaseTest.driver);
         PageFactory.initElements(driver, this);
         act = new Actions(driver);
+        navBar = new NavBar(driver);
                             }
-
+     // площадь
+     String pl = "2000.20";
+    // Генерация случайного float
+    float randomFloat = Math.round((10 + random.nextFloat() * 998000) * 100) / 100.0f;
+    // Форматирование числа: точка → заменяется на запятую
+    String randomNumber = String.format(Locale.ENGLISH, "%.2f", randomFloat).replace(',', '.');
     // вкладка объекты
     @FindBy (xpath="//a[@href='/bh/objects']")
      WebElement object;
     // раздел земельный участок
     @FindBy (xpath = "//*[contains(text(), ' Земельный участок ')]")
      WebElement landPlotTab;
-    // кнопка добавить
-    @FindBy (xpath = "//*[@ng-reflect-message='Добавить']")
-     WebElement add;
+//    // кнопка добавить
+//    @FindBy (xpath = "//*[@ng-reflect-message='Добавить']")
+//     WebElement add;
     // поле кадастровый номер
     @FindBy (id = "ROBJECT_ADD_KADASTR_NO")
     WebElement kadastrNomer;
@@ -48,6 +56,9 @@ public class AddObjectsTest extends BaseTest{
     // поле площадь общая
     @FindBy(id ="ROBJECT_ADD_PL")
     WebElement addPlCommon;
+    // поле площадь при редактировании
+    @FindBy(id ="ROBJECT_EDIT_PLL")
+    WebElement addPlEdit;
     // список категория земель
     @FindBy(xpath = "//div[@ng-reflect-message='Категория земель']/parent::div//button[@title='Открыть справочник']")
     WebElement katZemList;
@@ -70,7 +81,7 @@ public class AddObjectsTest extends BaseTest{
     @FindBy(id="ROBJECT_ADD_COMIS_COAST")
     WebElement comisCoast;
     // поле кадастровая стоимость
-    @FindBy(id="ROBJECT_ADD_KADASTR_COAST")
+    @FindBy(id="ROBJECT_EDIT_KADASTR_COAST")
     WebElement kadastrCoast;
 
     // раздел недвижимое имущество
@@ -86,6 +97,15 @@ public class AddObjectsTest extends BaseTest{
     // раздел автотранспорт
     @FindBy(xpath = "//mat-tree-node/li[contains(text(), 'Автотранспорт')]")
     WebElement avto;
+    // объект для редактирования
+    @FindBy(xpath = "((//*[@col-id=\"NAME\"])[2]")
+    WebElement objectForChange;
+    // поле площпдь объекта
+    @FindBy(xpath = "(//*[@col-id=\"PL\"])[2]")
+    WebElement plObject;
+    @FindBy(xpath = "(//*[@col-id=\"KADASTR_COAST\"])[2]")
+    WebElement coastObject;
+
 
 
     @Test(description = "добавление объекта земельный участок/")
@@ -93,7 +113,7 @@ public class AddObjectsTest extends BaseTest{
         object.click();
         landPlotTab.click();
         waitForSpinnerToDisappear();
-        add.click();
+        NavBar.add.click();
         kadastrNomer.sendKeys("89:10:010209:778");
         addDatain.sendKeys("01.01.1999");
         addName.sendKeys("Земельный участок автотест" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()));
@@ -116,7 +136,7 @@ public class AddObjectsTest extends BaseTest{
         object.click();
         realEstate.click();
         waitForSpinnerToDisappear();
-        add.click();
+        NavBar.add.click();
         adressList.click();
         fias.fias(driver);
         addName.sendKeys("Недвижимое имущество автотест"+new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()));
@@ -129,11 +149,36 @@ public class AddObjectsTest extends BaseTest{
         isMovable.click();
         avto.click();
         waitForSpinnerToDisappear();
-        add.click();
+        NavBar.add.click();
         addName.sendKeys("Авто"+new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()));
         save.click();
         reasonModal.reasonModal(driver);
     }
+    @Test(description = "редактирование объекта, обязательное поле, с историей")
+    public void changeObject() {
+        PageFactory.initElements(driver, this);
+        object.click();
+        landPlotTab.click();
+        NavBar.change.click();
+        addPlCommon.clear();
+        addPlCommon.sendKeys(randomNumber);
+        save.click();
+        reasonModal.reasonModal(driver);
+        sleep();
+        Assert.assertEquals(addPlEdit.getText(),randomNumber);
+    }
+    @Test(description = "редактирование объекта, необязательное поле, без истории")
+    public void changeObject2() {
+        object.click();
+        landPlotTab.click();
+        NavBar.change.click();
+        kadastrCoast.clear();
+        kadastrCoast.sendKeys(String.valueOf(randomNumber));
+        save.click();
+        sleep();
+        Assert.assertEquals(coastObject.getText(), randomNumber);
+    }
+
     }
 
 
