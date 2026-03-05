@@ -4,18 +4,26 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class NavBar extends BaseTest {
-    // кнопка редактирования
-    @FindBy(xpath = "//*[@mattooltip=\"Редактировать\"]")
-   static WebElement change;
-    // кнопка добавить
-    @FindBy (xpath = "//*[@ng-reflect-message='Добавить']")
-    static WebElement add;
-    // Конструктор для инициализации
+    // для инициализации
     public NavBar(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
-    //скролл вправа
-    @FindBy (xpath = "[class=\"ag-theme-balham ag-theme-balham-top\"]")
-    static WebElement scroll;
+    // кнопка редактирования
+    @FindBy(xpath = "//*[@mattooltip=\"Редактировать\"]")
+    public static WebElement change;
+    // кнопка добавить
+    @FindBy (xpath = "//*[@ng-reflect-message='Добавить']")
+    public static WebElement add;
+    //кнопка для копирования
+    @FindBy (xpath = "//*[@mattooltip='Копия']")
+    public static WebElement copyButton;
+
+    //кнопка для сохранения в окне редактирования
+    @FindBy(xpath = "//*[contains(text(), 'Сохранить')]")
+    public static WebElement save;
+
+
+
+
 
 }

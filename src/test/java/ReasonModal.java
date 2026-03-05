@@ -16,15 +16,16 @@ public class ReasonModal extends BaseTest {
     WebElement saveReasonButton;
 
 
-    public void reasonModal(WebDriver driver) {
+    public void reasonModal(WebDriver driver, String text) {
         setTimeout();
         PageFactory.initElements(driver, this);
         // указание причины
         Select reason1 = new Select(reason);
-        reason1.selectByVisibleText("Изменения по объекту");
+        reason1.selectByVisibleText(text);
         // указание основания
         doc.sendKeys("-");
         //сохранение документа основания
         saveReasonButton.click();
+
     }
 }
