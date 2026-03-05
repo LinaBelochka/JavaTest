@@ -1,3 +1,4 @@
+import org.openqa.selenium.By;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -6,9 +7,6 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-import java.util.Random;
-
 
 public class AddObjectsTest extends BaseTest{
 
@@ -17,6 +15,18 @@ public class AddObjectsTest extends BaseTest{
     static ReasonModal reasonModal;
     static Fias fias;
     static NavBar navBar;
+    String text = "Решение суда";
+    static RundomNumbers rundomNumbers;
+
+
+    // получение количества активных элементов
+    public Integer getCountActiveElements() {
+        WebElement text  = driver.findElement(By.xpath("//*[@class=\"grid-active-info\"]"));
+        String text1 = text.getText();
+        String[] parts = text1.split(" ");
+        String activeCountStr = parts[1];
+        return Integer.parseInt(activeCountStr);
+    }
 
     @BeforeClass
     public void beforeAll() {
@@ -28,22 +38,16 @@ public class AddObjectsTest extends BaseTest{
         PageFactory.initElements(driver, this);
         act = new Actions(driver);
         navBar = new NavBar(driver);
+        rundomNumbers = new RundomNumbers();
                             }
      // площадь
      String pl = "2000.20";
-    // Генерация случайного float
-    float randomFloat = Math.round((10 + random.nextFloat() * 998000) * 100) / 100.0f;
-    // Форматирование числа: точка → заменяется на запятую
-    String randomNumber = String.format(Locale.ENGLISH, "%.2f", randomFloat).replace(',', '.');
     // вкладка объекты
     @FindBy (xpath="//a[@href='/bh/objects']")
      WebElement object;
     // раздел земельный участок
     @FindBy (xpath = "//*[contains(text(), ' Земельный участок ')]")
      WebElement landPlotTab;
-//    // кнопка добавить
-//    @FindBy (xpath = "//*[@ng-reflect-message='Добавить']")
-//     WebElement add;
     // поле кадастровый номер
     @FindBy (id = "ROBJECT_ADD_KADASTR_NO")
     WebElement kadastrNomer;
@@ -54,11 +58,14 @@ public class AddObjectsTest extends BaseTest{
     @FindBy(id = "ROBJECT_ADD_NAME")
      WebElement addName;
     // поле площадь общая
-    @FindBy(id ="ROBJECT_ADD_PL")
+    @FindBy(id ="ROBJECT_ADD_PL_COMMON")
     WebElement addPlCommon;
     // поле площадь при редактировании
-    @FindBy(id ="ROBJECT_EDIT_PLL")
+    @FindBy(id ="ROBJECT_EDIT_PL_COMMON")   // ROBJECT_EDIT_PL
     WebElement addPlEdit;
+    //площадь для сравнения
+    @FindBy(xpath ="(//*[@col-id=\"PL_COMMON\"])[2]")
+    WebElement plForCompare;
     // список категория земель
     @FindBy(xpath = "//div[@ng-reflect-message='Категория земель']/parent::div//button[@title='Открыть справочник']")
     WebElement katZemList;
@@ -69,7 +76,7 @@ public class AddObjectsTest extends BaseTest{
     @FindBy(xpath = "//button[text()=\"ОК\"]")
     WebElement ok;
     // список октмо
-    @FindBy (xpath = "//input[@id='ROBJECT_ADD_OKTMO_REG']/parent::div/div/button[@title='Открыть справочник']")
+    @FindBy (xpath = "//input[@id='ROBJECT_ADD_OKTMO']/parent::div/div/button[@title='Открыть справочник']")
     WebElement oktmolist;
     // элемент октмо
     @FindBy (xpath = "//*[contains(text(), 'Удмуртская Республика (ОКТМО)')]")
@@ -81,8 +88,16 @@ public class AddObjectsTest extends BaseTest{
     @FindBy(id="ROBJECT_ADD_COMIS_COAST")
     WebElement comisCoast;
     // поле кадастровая стоимость
-    @FindBy(id="ROBJECT_EDIT_KADASTR_COAST")
+    @FindBy(id="ROBJECT_ADD_KADASTR_COAST")
     WebElement kadastrCoast;
+    //поле кадастровая стоимость для редактирования
+    @FindBy(id="ROBJECT_EDIT_KADASTR_COAST")
+    WebElement kadastrCoastEdit;
+    // поле балансовая стоимость для сравнения
+    @FindBy(xpath = "(//*[@col-id='KADASTR_COAST'])[2]")
+    WebElement coastObject;
+    //количестово действующих объектов
+
 
     // раздел недвижимое имущество
     @FindBy (xpath ="//*[contains(text(), ' Недвижимое имущество ')]" )
@@ -97,24 +112,16 @@ public class AddObjectsTest extends BaseTest{
     // раздел автотранспорт
     @FindBy(xpath = "//mat-tree-node/li[contains(text(), 'Автотранспорт')]")
     WebElement avto;
-    // объект для редактирования
-    @FindBy(xpath = "((//*[@col-id=\"NAME\"])[2]")
-    WebElement objectForChange;
-    // поле площпдь объекта
-    @FindBy(xpath = "(//*[@col-id=\"PL\"])[2]")
-    WebElement plObject;
-    @FindBy(xpath = "(//*[@col-id=\"KADASTR_COAST\"])[2]")
-    WebElement coastObject;
 
 
-
-    @Test(description = "добавление объекта земельный участок/")
+    @Test(description = "добавление объекта земельный участок/", alwaysRun=true)
     public void addZU() {
         object.click();
+        sleep();
         landPlotTab.click();
         waitForSpinnerToDisappear();
         NavBar.add.click();
-        kadastrNomer.sendKeys("89:10:010209:778");
+        kadastrNomer.sendKeys("89:10:089108:89");
         addDatain.sendKeys("01.01.1999");
         addName.sendKeys("Земельный участок автотест" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()));
         addPlCommon.sendKeys("1000");
@@ -129,9 +136,9 @@ public class AddObjectsTest extends BaseTest{
         sleep();
         act.doubleClick(oktmo).perform();
         save.click();
-        reasonModal.reasonModal(driver);
+        reasonModal.reasonModal(driver, text);
     }
-    @Test(description = "добавление недвижимого имущества")
+    @Test(description = "добавление недвижимого имущества", alwaysRun=true)
     public void addNedvizhimoe() {
         object.click();
         realEstate.click();
@@ -141,9 +148,9 @@ public class AddObjectsTest extends BaseTest{
         fias.fias(driver);
         addName.sendKeys("Недвижимое имущество автотест"+new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()));
         save.click();
-        reasonModal.reasonModal(driver);
+        reasonModal.reasonModal(driver, text);
 }
-    @Test(description = "добавление объекта движимое имущество Автотранспорт")
+    @Test(description = "добавление объекта движимое имущество Автотранспорт", alwaysRun=true)
     public void addDvizhimoe(){
         object.click();
         isMovable.click();
@@ -152,33 +159,49 @@ public class AddObjectsTest extends BaseTest{
         NavBar.add.click();
         addName.sendKeys("Авто"+new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()));
         save.click();
-        reasonModal.reasonModal(driver);
+        reasonModal.reasonModal(driver, text);
     }
-    @Test(description = "редактирование объекта, обязательное поле, с историей")
+    @Test(description = "редактирование объекта, обязательное поле, с историей", alwaysRun=true)
     public void changeObject() {
+        driver.navigate().refresh();
         PageFactory.initElements(driver, this);
         object.click();
         landPlotTab.click();
         NavBar.change.click();
-        addPlCommon.clear();
-        addPlCommon.sendKeys(randomNumber);
+        addPlEdit.clear();
+        addPlEdit.sendKeys(RundomNumbers.randomNumberFloat);
         save.click();
-        reasonModal.reasonModal(driver);
         sleep();
-        Assert.assertEquals(addPlEdit.getText(),randomNumber);
+        reasonModal.reasonModal(driver, text);
+        sleep();
+        Assert.assertEquals(plForCompare.getText(),RundomNumbers.randomNumberFloat);
     }
-    @Test(description = "редактирование объекта, необязательное поле, без истории")
+    @Test(description = "редактирование объекта, необязательное поле, без истории", alwaysRun=true)
     public void changeObject2() {
+        driver.navigate().refresh();
         object.click();
         landPlotTab.click();
         NavBar.change.click();
-        kadastrCoast.clear();
-        kadastrCoast.sendKeys(String.valueOf(randomNumber));
+        kadastrCoastEdit.clear();
+        kadastrCoastEdit.sendKeys(String.valueOf(RundomNumbers.randomNumberFloat));
         save.click();
         sleep();
-        Assert.assertEquals(coastObject.getText(), randomNumber);
+        Assert.assertEquals(coastObject.getText(), RundomNumbers.randomNumberFloat);
+    }
+    @Test (description = "Создание копии объекта", alwaysRun = true)
+    public void copyObject() {
+        object.click();
+        landPlotTab.click();
+        sleep();
+        Integer countObj = getCountActiveElements()+1;
+        NavBar.copyButton.click();
+        sleep();
+        save.click();
+        reasonModal.reasonModal(driver, text);
+        sleep();
+        Assert.assertEquals(countObj, getCountActiveElements());
     }
 
-    }
+}
 
 
