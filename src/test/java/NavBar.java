@@ -17,6 +17,9 @@ public class NavBar extends BaseTest {
     //кнопка для копирования
     @FindBy (xpath = "//*[@mattooltip='Копия']")
     public static WebElement copyButton;
+    @FindBy (xpath = "//button[@ng-reflect-message=\"Архив документов\"]")
+    public static WebElement arhiveDoc;
+
 
     //кнопка для сохранения в окне редактирования
     @FindBy(xpath = "//*[contains(text(), 'Сохранить')]")
