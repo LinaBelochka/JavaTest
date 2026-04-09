@@ -111,5 +111,8 @@ public class DocTest extends BaseTest {
         close.click();
     }
 
+    @Test(description = "удаление документа в архив документов из реестра")
+    public void dellArhdoc() {}
+
 
 }
